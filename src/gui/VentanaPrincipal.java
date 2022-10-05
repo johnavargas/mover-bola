@@ -22,13 +22,13 @@ public class VentanaPrincipal extends JFrame
         JButton btnDetener = new JButton("Detener");
         panel.add(btnDetener);
 
-        lienzo = new Tablero();
-        panel.add(lienzo);
-
-        reloj = new Timer(50, actionEvent -> {
+        reloj = new Timer(20, actionEvent -> {
             lienzo.mover();
             lienzo.repaint();
         });
+
+        lienzo = new Tablero(reloj);
+        panel.add(lienzo);
 
         btnIniciar.addActionListener(actionEvent -> {
             reloj.start();
