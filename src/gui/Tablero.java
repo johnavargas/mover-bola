@@ -1,17 +1,23 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Tablero extends Canvas implements MouseListener, KeyListener {
     int x = 10, y = 10, x2=50, y2=50;
     int radio = 25;
     Timer reloj;
     Color color = Color.black;
+    boolean detener = false;
+    BufferedImage image = null;
 
     public Tablero(Timer reloj)
     {
@@ -21,6 +27,13 @@ public class Tablero extends Canvas implements MouseListener, KeyListener {
         addMouseListener(this);
         addKeyListener(this);
         this.reloj = reloj;
+
+        try {
+            File path = new File("./img");
+            image = ImageIO.read(new File(path, "smile.jpeg"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
    }
 
     public void paint(Graphics g) {
@@ -29,6 +42,18 @@ public class Tablero extends Canvas implements MouseListener, KeyListener {
 
         g.setColor(Color.blue);
         g.fillOval(x2, y2, 30, 30);
+
+        if (image != null) {
+            g.drawImage(image, x2, y2, 100, 100, null);
+        }
+
+        Color[] colores = {Color.red, Color.blue, Color.cyan, Color.green};
+        for (int i = 0; i < 5; i++) {
+            int new_x = (int)(Math.random() * 1000) % 390;
+            int new_y = (int)(Math.random() * 1000) % 400;
+            g.setColor(colores[(int)(Math.random() * 1000) % 4]);
+            g.fillOval(new_x, new_y, 30, 30);
+        }
     }
 
     public void mover(){
