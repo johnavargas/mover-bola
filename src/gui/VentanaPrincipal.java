@@ -1,41 +1,46 @@
 package gui;
 
+import net.*;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaPrincipal extends JFrame
 {
     Container panel;
-    Tablero lienzo;
-    Timer reloj;
+    public Tablero lienzo;
+    public Despachador despachador;
 
     public VentanaPrincipal() {
-        super("Ejemplo de animacion");
+        super("Ejemplo de juego en linea");
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         panel = getContentPane();
         panel.setLayout(new FlowLayout());
 
-        JButton btnIniciar = new JButton("Iniciar");
-        panel.add(btnIniciar);
-
-        JButton btnDetener = new JButton("Detener");
-        panel.add(btnDetener);
-
-        reloj = new Timer(20, actionEvent -> {
-            lienzo.mover();
-            lienzo.repaint();
-        });
-
-        lienzo = new Tablero(reloj);
+        lienzo = new Tablero();
         panel.add(lienzo);
 
-        btnIniciar.addActionListener(actionEvent -> {
-            reloj.start();
-        });
+        Cliente c = new Cliente();
+        c.conectar(this, lienzo); // se conecta al servidor
 
-        btnDetener.addActionListener(actionEvent -> {
-            reloj.stop();
-        });
+        conectar();  // conecta el usuario con el juego en linea
+    }
+
+    public void conectar(){
+        String color = JOptionPane.showInputDialog(this, "Color: ");
+        despachador.send("login:"+color);
+        lienzo.jugadorPresente = color;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
