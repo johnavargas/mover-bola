@@ -2,12 +2,14 @@ package net;
 
 import gui.*;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Despachador extends Thread {
     private PrintWriter out;
@@ -15,8 +17,8 @@ public class Despachador extends Thread {
     private String tipo = "lector";
     private Socket socket;
     public VentanaPrincipal gui = null;
-    public ArrayList<Despachador> escritores;
-    private String nickname;
+    public ArrayList<Despachador> escritores = new ArrayList<>();
+    public HashMap<String, Jugador> jugadores = new HashMap<>();
 
     public Despachador(Socket socket, String tipo) {
         try {
@@ -32,11 +34,7 @@ public class Despachador extends Thread {
 
     public void run(){
         try {
-            if (tipo.equals("lector")) {
-                leer();
-            } else {
-                escribir();
-            }
+            leer();
         }catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -47,52 +45,56 @@ public class Despachador extends Thread {
         while ((inputLine = in.readLine()) != null) {
             System.out.println("Recibido: " + inputLine);
 
-            String[] datos = inputLine.split(":");
 
             if (gui != null) {  // Cliente
-                if (datos[0].equals("login")) {
-                    gui.lienzo.adicionarJugador(datos[1]);
-                } else if (datos[0].equals("mover")) {
+                String[] datosJugadores = inputLine.split("#");
+                for (String jugador: datosJugadores) {
+                    System.out.println("leyendo jugador: " + jugador);
+                    String[] data = jugador.split(",");
+                    Color c = Color.black;
+                    switch (data[0]){
+                        case "rojo": c = Color.RED;
+                            break;
+                        case "verde": c = Color.GREEN;
+                            break;
+                        case "azul": c = Color.BLUE;
+                            break;
+                    }
+                    gui.lienzo.jugadores.put(data[0] , new Jugador(data[0], c, Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+
                 }
+                gui.lienzo.repaint();
             }
 
             if (gui == null) {  // Servidor
+                String[] datos = inputLine.split(":");
                 if (datos[0].equals("login")) {
-                    escritores.get(escritores.size()-1).nickname = datos[1];
-                    String listaNickNames = "";
+                    Color c = Color.black;
+                    switch (datos[1]){
+                        case "rojo": c = Color.RED;
+                            break;
+                        case "verde": c = Color.GREEN;
+                            break;
+                        case "azul": c = Color.BLUE;
+                            break;
+                    }
+                    jugadores.put(datos[1] , new Jugador(datos[1], c, 10, 10));
+                } else if (datos[0].equals("mover")) {
+                    String[] datosJugador = datos[1].split(",");
+                    jugadores.get(datosJugador[0]).x = Integer.parseInt(datosJugador[1]);
+                    jugadores.get(datosJugador[0]).y = Integer.parseInt(datosJugador[2]);
+                }
 
-                    for (Despachador e: escritores) {
-                        listaNickNames += e.nickname + ",";
-                    }
+                String[] lista = new String[jugadores.size()];
+                int index = 0;
+                for (Jugador e: jugadores.values()) {
+                    lista[index++] = e.nickname + "," + e.x + "," + e.y;
+                }
 
-                    for (Despachador e: escritores) {
-                        e.send("login:"+listaNickNames);
-                    }
-                } else if (datos[0].equals("msg")) {
-                    for (Despachador e: escritores) {
-                        e.send(inputLine);
-                    }
+                for (Despachador e: escritores) {
+                    e.send(String.join("#", lista));
                 }
             }
-        }
-    }
-
-    private void escribir() throws IOException {
-
-        BufferedReader stdIn =
-                new BufferedReader(new InputStreamReader(System.in));
-
-        String inputLine = stdIn.readLine();
-        while (inputLine != null) {
-            System.out.println("Enviado: " + inputLine);
-            out.println(inputLine);
-
-            if (inputLine.equals("Bye.")) {
-                socket.close();
-                break;
-            }
-
-            inputLine = stdIn.readLine();
         }
     }
 

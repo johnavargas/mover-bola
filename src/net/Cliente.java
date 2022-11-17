@@ -20,10 +20,8 @@ public class Cliente {
 
             Despachador escritor = new Despachador(kkSocket, "escritor");
             escritor.gui = gui;
-            gui.despachador = escritor;
+            gui.lienzo.despachador = gui.despachador = escritor;
             escritor.start();
-
-            gui.conectar();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

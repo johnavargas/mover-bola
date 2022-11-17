@@ -1,5 +1,7 @@
 package gui;
 
+import net.Despachador;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -7,8 +9,9 @@ import java.util.HashMap;
 
 public class Tablero extends Canvas implements KeyListener {
 
-    HashMap<String, Jugador> jugadores = new HashMap<>();
+    public HashMap<String, Jugador> jugadores = new HashMap<>();
     public String jugadorPresente = "";
+    public Despachador despachador;
 
     public Tablero()
     {
@@ -24,12 +27,16 @@ public class Tablero extends Canvas implements KeyListener {
             g.fillOval(j.x, j.y, 30, 30);
         }
     }
-
-    public void mover(){
+/*
+    public void mover(String[] datosJugador){
+        jugadores.get(datosJugador[0]).x = Integer.parseInt(datosJugador[1]);
+        jugadores.get(datosJugador[0]).y = Integer.parseInt(datosJugador[2]);
+        repaint();
     }
 
     public void adicionarJugador(String login){
         Color c = Color.black;
+        System.out.println("login: " + login);
         switch (login){
             case "rojo": c = Color.RED;
                 break;
@@ -41,7 +48,7 @@ public class Tablero extends Canvas implements KeyListener {
         jugadores.put(login , new Jugador(c, 10, 10));
         repaint();
     }
-
+*/
     @Override
     public void keyTyped(KeyEvent keyEvent) { }
 
@@ -62,7 +69,9 @@ public class Tablero extends Canvas implements KeyListener {
                 break;
         }
 
-        repaint();
+        int _x = jugadores.get(jugadorPresente).x;
+        int _y = jugadores.get(jugadorPresente).y;
+        despachador.send("mover:"+jugadorPresente+","+_x+","+_y );
     }
 
     @Override
