@@ -8,7 +8,8 @@ Para compilar el servidor
 javac -sourcepath ./src/ -d ./out/ ./src/net/Servidor.java
 
 Para ejecutar el servidor:
-cd out
+cd out 
+
 java net.Servidor &
 
 Para ejecutar un cliente:
