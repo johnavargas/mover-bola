@@ -1,54 +1,21 @@
-package gui;
+package controller;
 
-import net.Despachador;
+import model.Despachador;
+import view.Jugador;
+import view.VentanaPrincipal;
 
-import java.awt.*;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 
-public class Tablero extends Canvas implements KeyListener {
-
+public class Controlador implements KeyListener
+{
+    VentanaPrincipal vista;
     public HashMap<String, Jugador> jugadores = new HashMap<>();
     public String jugadorPresente = "";
     public Despachador despachador;
 
-    public Tablero()
-    {
-        super();
-        setBackground(Color.white);
-        setSize(390, 400);
-        addKeyListener(this);
-   }
-
-    public void paint(Graphics g) {
-        for (Jugador j: jugadores.values()) {
-            g.setColor(j.login);
-            g.fillOval(j.x, j.y, 30, 30);
-        }
-    }
-/*
-    public void mover(String[] datosJugador){
-        jugadores.get(datosJugador[0]).x = Integer.parseInt(datosJugador[1]);
-        jugadores.get(datosJugador[0]).y = Integer.parseInt(datosJugador[2]);
-        repaint();
-    }
-
-    public void adicionarJugador(String login){
-        Color c = Color.black;
-        System.out.println("login: " + login);
-        switch (login){
-            case "rojo": c = Color.RED;
-                break;
-            case "verde": c = Color.GREEN;
-                break;
-            case "azul": c = Color.BLUE;
-                break;
-        }
-        jugadores.put(login , new Jugador(c, 10, 10));
-        repaint();
-    }
-*/
     @Override
     public void keyTyped(KeyEvent keyEvent) { }
 
@@ -76,4 +43,10 @@ public class Tablero extends Canvas implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent keyEvent) { }
+
+    public void conectar(){
+        String color = JOptionPane.showInputDialog(this, "Color: ");
+        despachador.send("login:"+color);
+        jugadorPresente = color;
+    }
 }

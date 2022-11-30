@@ -1,25 +1,25 @@
-package net;
+package model;
 
 import java.net.*;
 import java.util.ArrayList;
 
-public class Servidor {
-    public static void main(String[] args) {
+public class Servidor
+{
+    public Servidor()
+    {
         int portNumber = 1234;
         ArrayList<Despachador> escritores = new ArrayList<>();
 
         try {
                 ServerSocket serverSocket = new ServerSocket(portNumber);
-                while (true) {
+                while (true)
+                {
                     Socket clientSocket = serverSocket.accept();
 
-                    Despachador lector = new Despachador(clientSocket, "lector");
-                    lector.start();
+                    Despachador lector = new Despachador(clientSocket);
+                    escritores.add(lector);
                     lector.escritores = escritores;
-
-                    Despachador escritor = new Despachador(clientSocket, "escritor");
-                    escritores.add(escritor);
-                    escritor.start();
+                    lector.start();
 
                     //clientSocket.close();
                 }

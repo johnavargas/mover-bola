@@ -1,7 +1,6 @@
-package gui;
+package view;
 
 import java.awt.*;
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 
 public class Jugador {
     public Color login;
