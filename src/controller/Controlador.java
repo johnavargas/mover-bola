@@ -16,6 +16,12 @@ public class Controlador implements KeyListener
     public String jugadorPresente = "";
     public Despachador despachador;
 
+    public Controlador(VentanaPrincipal v)
+    {
+        vista = v;
+        jugadores = vista.lienzo.jugadores;
+    }
+
     @Override
     public void keyTyped(KeyEvent keyEvent) { }
 
@@ -45,7 +51,7 @@ public class Controlador implements KeyListener
     public void keyReleased(KeyEvent keyEvent) { }
 
     public void conectar(){
-        String color = JOptionPane.showInputDialog(this, "Color: ");
+        String color = JOptionPane.showInputDialog(vista, "Color: ");
         despachador.send("login:"+color);
         jugadorPresente = color;
     }

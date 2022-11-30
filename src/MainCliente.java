@@ -5,10 +5,12 @@ import view.VentanaPrincipal;
 public class MainCliente {
     public static void main(String[] args)
     {
+        // Vista
         VentanaPrincipal ventana = new VentanaPrincipal();
         ventana.setVisible(true);
 
-        Controlador controlador = new Controlador();
+        // Controlador
+        Controlador controlador = new Controlador(ventana);
         ventana.lienzo.addKeyListener(controlador);
 
         Cliente c = new Cliente();
