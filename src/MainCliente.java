@@ -1,7 +1,10 @@
 import controller.Controlador;
-import model.Cliente;
 import view.VentanaPrincipal;
 
+/**
+ * clase ejecutable para el cliente.
+ * Muestra una interface grafica de usuario
+ */
 public class MainCliente {
     public static void main(String[] args)
     {
@@ -11,13 +14,8 @@ public class MainCliente {
 
         // Controlador
         Controlador controlador = new Controlador(ventana);
-        ventana.lienzo.addKeyListener(controlador);
+        ventana.getLienzo().addKeyListener(controlador);
 
-        Cliente c = new Cliente();
-        controlador.despachador = c.conectar(ventana, ventana.lienzo);
-
-        if (controlador.despachador != null) {
-            controlador.conectar();
-        }
+        controlador.conectar();
     }
 }

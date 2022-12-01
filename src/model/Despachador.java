@@ -14,7 +14,6 @@ import java.util.HashMap;
 public class Despachador extends Thread {
     private PrintWriter out;
     private BufferedReader in;
-    private Socket socket;
     public VentanaPrincipal gui = null;
     public ArrayList<Despachador> escritores = new ArrayList<>();
     public HashMap<String, Jugador> jugadores = new HashMap<>();
@@ -24,7 +23,7 @@ public class Despachador extends Thread {
             this.in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.socket = socket;
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -58,7 +57,7 @@ public class Despachador extends Thread {
             System.out.println("leyendo jugador: " + jugador);
             String[] data = jugador.split(",");
 
-            gui.lienzo.jugadores.put(data[0] ,
+            gui.getLienzo().getJugadores().put(data[0] ,
                                      new Jugador(data[0],
                                                 getColor(data[0]),
                                                 Integer.parseInt(data[1]),
@@ -66,7 +65,7 @@ public class Despachador extends Thread {
                                                )
                                     );
         }
-        gui.lienzo.repaint();
+        gui.getLienzo().repaint();
     }
 
     public Color getColor(String login)
@@ -90,14 +89,14 @@ public class Despachador extends Thread {
             jugadores.put(datos[1] , new Jugador(datos[1], null, 10, 10));
         } else if (datos[0].equals("mover")) {
             String[] datosJugador = datos[1].split(",");
-            jugadores.get(datosJugador[0]).x = Integer.parseInt(datosJugador[1]);
-            jugadores.get(datosJugador[0]).y = Integer.parseInt(datosJugador[2]);
+            jugadores.get(datosJugador[0]).setX(Integer.parseInt(datosJugador[1]));
+            jugadores.get(datosJugador[0]).setY(Integer.parseInt(datosJugador[2]));
         }
 
         String[] lista = new String[jugadores.size()];
         int index = 0;
         for (Jugador e: jugadores.values()) {
-            lista[index++] = e.nickname + "," + e.x + "," + e.y;
+            lista[index++] = e.getNickname() + "," + e.getX() + "," + e.getY();
         }
 
         for (Despachador e: escritores) {

@@ -1,14 +1,11 @@
 package view;
-
-import model.*;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaPrincipal extends JFrame
 {
-    Container panel;
-    public Tablero lienzo;
+    private Container panel;
+    private Tablero lienzo;
 
     public VentanaPrincipal() {
         super("Ejemplo de juego en linea");
@@ -19,6 +16,10 @@ public class VentanaPrincipal extends JFrame
 
         lienzo = new Tablero();
         panel.add(lienzo);// se conecta al servidor
+    }
+
+    public Tablero getLienzo() {
+        return lienzo;
     }
 }
 
