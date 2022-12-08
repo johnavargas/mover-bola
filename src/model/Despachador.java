@@ -44,7 +44,7 @@ public class Despachador extends Thread {
 
             if (gui != null) {  // Cliente
                 procesarCliente(inputLine);
-            } else {
+            } else {            // Servidor
                 procesarServidor(inputLine);
             }
         }
@@ -68,18 +68,18 @@ public class Despachador extends Thread {
         gui.getLienzo().repaint();
     }
 
-    public Color getColor(String login)
+    public static Color getColor(String login)
     {
-        Color c = Color.black;
-        switch (login){
-            case "rojo": c = Color.RED;
-                break;
-            case "verde": c = Color.GREEN;
-                break;
-            case "azul": c = Color.BLUE;
-                break;
-        }
-        return c;
+        HashMap<String, Color> colores = new HashMap<>();
+        colores.put( "rojo", Color.RED);
+        colores.put( "verde", Color.GREEN);
+        colores.put( "azul", Color.BLUE);
+        colores.put( "amarillo", Color.yellow);
+        colores.put( "magenta", Color.MAGENTA);
+
+        Color c = colores.get(login);
+
+        return (c != null) ? c : Color.BLACK;
     }
 
     public void procesarServidor(String entrada)
@@ -102,6 +102,8 @@ public class Despachador extends Thread {
         for (Despachador e: escritores) {
             e.send(String.join("#", lista));
         }
+
+        Almacen.escribir(jugadores);
     }
 
     public void send(String inputLine)

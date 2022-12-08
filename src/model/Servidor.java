@@ -1,34 +1,36 @@
 package model;
 
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Servidor
 {
-    public Servidor()
+    private int portNumber;
+    private int max_num_jugadores;
+    private ArrayList<Despachador> escritores = new ArrayList<>();
+    private HashMap<String, Jugador> jugadores = new HashMap<>();
+
+    public Servidor(int portNumber, int max_num_jugadores) {
+        this.portNumber = portNumber;
+        this.max_num_jugadores = max_num_jugadores;
+    }
+
+    public void conectar() throws IOException
     {
-        int portNumber = 1234;
-        ArrayList<Despachador> escritores = new ArrayList<>();
-        HashMap<String, Jugador> jugadores = new HashMap<>();
+        ServerSocket serverSocket = new ServerSocket(portNumber);
+        while (true)
+        {
+            Socket clientSocket = serverSocket.accept();
 
-        try {
-                ServerSocket serverSocket = new ServerSocket(portNumber);
-                while (true)
-                {
-                    Socket clientSocket = serverSocket.accept();
-
-                    Despachador lector = new Despachador(clientSocket);
-                    escritores.add(lector);
-                    lector.escritores = escritores;
-                    lector.jugadores = jugadores;
-                    lector.start();
-
-                    //clientSocket.close();
-                }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            Despachador lector = new Despachador(clientSocket);
+            escritores.add(lector);
+            lector.escritores = escritores;
+            lector.jugadores = jugadores;
+            lector.start();
         }
 
+        //serverSocket.close();
     }
 }
