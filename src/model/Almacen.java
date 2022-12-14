@@ -21,7 +21,7 @@ public final class Almacen {
         return instancia;
     }
 
-    public HashMap<String, Jugador> leer(){
+    public static HashMap<String, Jugador> leer(){
         HashMap<String, Jugador> jugadores = new HashMap<>();
 
         try {
@@ -35,7 +35,8 @@ public final class Almacen {
                         new Jugador(datos[0],
                                 Despachador.getColor(datos[0]),
                                 Integer.parseInt(datos[1]),
-                                Integer.parseInt(datos[2])
+                                Integer.parseInt(datos[2]),
+                                Boolean.parseBoolean(datos[3])
                         )
                 );
             }
@@ -54,7 +55,7 @@ public final class Almacen {
             PrintWriter escritor = new PrintWriter(new FileWriter("datos_bolas.txt"));
 
             for (Jugador j : jugadores.values()) {
-                escritor.println(j.getNickname() + ":" + j.getX() + ":" + j.getY());
+                escritor.println(j.getNickname() + ":" + j.getX() + ":" + j.getY()+":"+j.isConectado());
             }
 
             escritor.close();

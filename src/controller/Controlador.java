@@ -8,9 +8,11 @@ import view.VentanaPrincipal;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.HashMap;
 
-public class Controlador implements KeyListener
+public class Controlador implements KeyListener, WindowListener
 {
     VentanaPrincipal vista;
     public HashMap<String, Jugador> jugadores = new HashMap<>();
@@ -55,8 +57,13 @@ public class Controlador implements KeyListener
         String color = JOptionPane.showInputDialog(vista, "Color: ");
         despachador.send("login:"+color);
         jugadorPresente = color;
+
+        vista.setTitle(vista.getTitle() + " - " + color);
     }
 
+    /**
+     * Conectar un cliente a la red del programa
+     */
     public void conectar()
     {
         Cliente conexion = new Cliente("localhost", 1234);
@@ -72,4 +79,38 @@ public class Controlador implements KeyListener
     }
 
 
+    @Override
+    public void windowOpened(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent windowEvent) {
+        despachador.send("logout:"+jugadorPresente);
+    }
+
+    @Override
+    public void windowIconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent windowEvent) {
+
+    }
 }

@@ -7,13 +7,15 @@ public class Jugador {
     private String nickname;
     private int x;
     private int y;
+    private boolean conectado;
 
-    public Jugador(String n, Color l, int x, int y)
+    public Jugador(String n, Color l, int x, int y, boolean conectado)
     {
         nickname = n;
         login = l;
         this.x = x;
         this.y = y;
+        this.conectado = conectado;
     }
 
     public void moverX(int h)
@@ -32,6 +34,14 @@ public class Jugador {
 
     public void setLogin(Color login) {
         this.login = login;
+    }
+
+    public boolean isConectado() {
+        return conectado;
+    }
+
+    public void setConectado(boolean conectado) {
+        this.conectado = conectado;
     }
 
     public String getNickname() {

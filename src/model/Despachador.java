@@ -61,7 +61,8 @@ public class Despachador extends Thread {
                                      new Jugador(data[0],
                                                 getColor(data[0]),
                                                 Integer.parseInt(data[1]),
-                                                Integer.parseInt(data[2])
+                                                Integer.parseInt(data[2]),
+                                                true
                                                )
                                     );
         }
@@ -86,11 +87,20 @@ public class Despachador extends Thread {
     {
         String[] datos = entrada.split(":");
         if (datos[0].equals("login")) {
-            jugadores.put(datos[1] , new Jugador(datos[1], null, 10, 10));
+            // Si el jugador no existe, lo crea.
+            if (jugadores.get(datos[1]) == null) {
+                jugadores.put(datos[1] , new Jugador(datos[1], null, 10, 10, true));
+            } else if (jugadores.get(datos[1]).isConectado()) {
+                return;
+            } else {
+                jugadores.get(datos[1]).setConectado(true);
+            }
         } else if (datos[0].equals("mover")) {
             String[] datosJugador = datos[1].split(",");
             jugadores.get(datosJugador[0]).setX(Integer.parseInt(datosJugador[1]));
             jugadores.get(datosJugador[0]).setY(Integer.parseInt(datosJugador[2]));
+        } else if (datos[0].equals("logout")) {
+            jugadores.get(datos[1]).setConectado(false);
         }
 
         String[] lista = new String[jugadores.size()];

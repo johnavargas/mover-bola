@@ -10,11 +10,12 @@ public class Servidor
     private int portNumber;
     private int max_num_jugadores;
     private ArrayList<Despachador> escritores = new ArrayList<>();
-    private HashMap<String, Jugador> jugadores = new HashMap<>();
+    private HashMap<String, Jugador> jugadores = null;
 
     public Servidor(int portNumber, int max_num_jugadores) {
         this.portNumber = portNumber;
         this.max_num_jugadores = max_num_jugadores;
+        jugadores = Almacen.leer();
     }
 
     public void conectar() throws IOException
