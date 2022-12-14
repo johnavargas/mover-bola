@@ -6,22 +6,22 @@ import view.VentanaPrincipal;
 import java.net.*;
 
 public class Cliente {
-    public Despachador conectar(VentanaPrincipal gui, Tablero tablero) {
-        String hostName = "localhost";
-        int portNumber = 1234;//Integer.parseInt(args[1]);
+    private String hostName;
+    private int portNumber;
 
-        try {
-            Socket kkSocket = new Socket(hostName, portNumber);
+    public Cliente(String hostName, int portNumber) {
+        this.hostName = hostName;
+        this.portNumber = portNumber;
+    }
 
-            Despachador lector = new Despachador(kkSocket);
-            lector.gui = gui;
-            lector.start();
+    public Despachador conectar(VentanaPrincipal gui) throws Exception
+    {
+        Socket kkSocket = new Socket(hostName, portNumber);
 
-            return lector;
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        Despachador lector = new Despachador(kkSocket);
+        lector.gui = gui;
+        lector.start();
 
-        return null;
+        return lector;
     }
 }

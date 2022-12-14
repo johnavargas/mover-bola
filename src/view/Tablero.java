@@ -1,15 +1,13 @@
 package view;
 
-import model.Despachador;
+import model.Jugador;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class Tablero extends Canvas {
 
-    public HashMap<String, Jugador> jugadores = new HashMap<>();
+    private HashMap<String, Jugador> jugadores = new HashMap<>();
 
     public Tablero()
     {
@@ -20,10 +18,16 @@ public class Tablero extends Canvas {
 
     public void paint(Graphics g) {
         for (Jugador j: jugadores.values()) {
-            g.setColor(j.login);
-            g.fillOval(j.x, j.y, 30, 30);
+            g.setColor(j.getLogin());
+            g.fillOval(j.getX(), j.getY(), 30, 30);
         }
     }
 
+    public void setJugadores(HashMap<String, Jugador> jugadores) {
+        this.jugadores = jugadores;
+    }
 
+    public HashMap<String, Jugador> getJugadores() {
+        return jugadores;
+    }
 }

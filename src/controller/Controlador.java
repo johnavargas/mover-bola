@@ -1,7 +1,8 @@
 package controller;
 
+import model.Cliente;
 import model.Despachador;
-import view.Jugador;
+import model.Jugador;
 import view.VentanaPrincipal;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class Controlador implements KeyListener
     public Controlador(VentanaPrincipal v)
     {
         vista = v;
-        jugadores = vista.lienzo.jugadores;
+        vista.getLienzo().setJugadores( jugadores );
     }
 
     @Override
@@ -29,30 +30,46 @@ public class Controlador implements KeyListener
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_UP:
-                jugadores.get(jugadorPresente).y -= 2;
+                jugadores.get(jugadorPresente).moverY(-2);
                 break;
             case KeyEvent.VK_RIGHT:
-                jugadores.get(jugadorPresente).x  += 2;
+                jugadores.get(jugadorPresente).moverX(2);
                 break;
             case KeyEvent.VK_DOWN:
-                jugadores.get(jugadorPresente).y  += 2;
+                jugadores.get(jugadorPresente).moverY(2);
                 break;
             case KeyEvent.VK_LEFT:
-                jugadores.get(jugadorPresente).x -= 2;
+                jugadores.get(jugadorPresente).moverX(-2);
                 break;
         }
 
-        int _x = jugadores.get(jugadorPresente).x;
-        int _y = jugadores.get(jugadorPresente).y;
+        int _x = jugadores.get(jugadorPresente).getX();
+        int _y = jugadores.get(jugadorPresente).getY();
         despachador.send("mover:"+jugadorPresente+","+_x+","+_y );
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) { }
 
-    public void conectar(){
+    private void ingresar(){
         String color = JOptionPane.showInputDialog(vista, "Color: ");
         despachador.send("login:"+color);
         jugadorPresente = color;
     }
+
+    public void conectar()
+    {
+        Cliente conexion = new Cliente("localhost", 1234);
+        try {
+            despachador = conexion.conectar(vista);
+
+            if (despachador != null) {
+                ingresar();
+            }
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(vista, "Error: " + e.getMessage());
+        }
+    }
+
+
 }
